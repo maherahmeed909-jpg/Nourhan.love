@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إلى نورهان ❤️</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#57133f,#170817 65%);color:#fff;font-family:Tahoma,Arial,sans-serif;text-align:center}
+.screen{display:none;min-height:100vh;padding:32px 16px;align-items:center;justify-content:center;flex-direction:column;gap:18px}.screen.active{display:flex;animation:fade .6s}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+h1{color:#ff9acb;font-size:clamp(25px,5vw,38px)}p{max-width:760px;line-height:2;font-size:18px;white-space:pre-wrap}
+button,.btn{border:0;border-radius:30px;padding:13px 27px;background:linear-gradient(45deg,#ed287e,#ff83bd);color:#fff;font-size:17px;cursor:pointer;margin:5px}
+input,textarea{font:inherit;padding:13px;border-radius:12px;border:1px solid #ff8cbe;width:min(520px,95%);background:#fff;color:#222}
+textarea{min-height:95px}img{max-width:100%;object-fit:cover;border-radius:18px;border:2px solid #ff8cbe}
+.heart{font-size:110px;animation:pulse 1s infinite;filter:drop-shadow(0 0 24px #ff398c)}@keyframes pulse{50%{transform:scale(1.18)}}
+#gate{position:fixed;inset:0;background:#18091b;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}
+.panel{background:#ffffff12;border:1px solid #ffffff22;border-radius:20px;padding:24px;width:min(760px,96vw);max-height:90vh;overflow:auto}
+.gallery{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}.gallery img{width:190px;height:210px}
+.card{background:#ffffff12;padding:18px;border-radius:16px;width:min(650px,96vw)}
+small{color:#ffc4df}.hidden{display:none!important}.admin-grid{display:grid;grid-template-columns:1fr;gap:12px;text-align:right}
+label{display:block;color:#ffd0e5;margin:8px 0 5px}
+#status{min-height:24px;color:#ffe0ee}
+</style>
+</head>
+<body>
+<div id="gate">
+ <div class="panel">
+  <div class="heart">❤️</div><h1>رسالة خاصة لنورهان</h1>
+  <p>اكتبي كلمة المرور للدخول</p>
+  <input id="gatePass" type="password" placeholder="كلمة المرور" autocomplete="current-password">
+  <button id="gateBtn">دخول ❤️</button><div id="gateError"></div>
+  <small>ملاحظة: كلمة مرور نورهان بوابة عرض فقط؛ حماية الإدارة تتم عبر Supabase Auth.</small>
+ </div>
+</div>
+
+<main id="site" class="hidden">
+ <section class="screen active" id="s0"><div class="heart">❤️</div><h1 id="heroTitle">بحبك يا نورهان</h1><p id="heroText">كل حاجة حلوة في حياتي بتبدأ بوجودك ❤️</p><button onclick="go(1)">التالي ❤️</button></section>
+ <section class="screen" id="s1"><h1 id="balloonTitle">كل بالونة فيها أمنية ليكي 🎈</h1><p id="balloonText">أتمنى أشوف ضحكتك دايمًا، وتفضلي أجمل حاجة في حياتي.</p><div style="font-size:55px">🎈 💗 🎈 💖 🎈</div><button onclick="go(2)">التالي ❤️</button></section>
+ <section class="screen" id="s2"><h1 id="galleryTitle">أجمل ذكرياتنا 📸</h1><p id="galleryText">كل صورة ليها حكاية، وكل حكاية فيها جزء من قلبي.</p><div id="gallery" class="gallery"></div><button onclick="go(3)">التالي ❤️</button></section>
+ <section class="screen" id="s3"><h1 id="musicTitle">أغنية مخصوص ليكي 🎵</h1><p id="musicText">كل أغنية حب بتفكرني بيكي</p><audio id="audio" controls style="width:min(450px,95%)"></audio><button onclick="go(4)">التالي ❤️</button></section>
+ <section class="screen" id="s4"><h1 id="letterTitle">رسالة من قلبي ليكي 💌</h1><div class="card"><p id="letterText">يا نورهان ❤️\n\nمش عارف أوصفلك قد إيه وجودك في حياتي بيفرق معايا.\n\nبحبك جدًا ❤️</p></div><button onclick="go(5)">المفاجأة الأخيرة ❤️</button></section>
+ <section class="screen" id="s5"><h1 id="finalTitle">أجمل واحدة في الدنيا ❤️</h1><img id="finalImage" style="width:min(350px,90vw);max-height:430px" alt="صورة نورهان"><p id="finalText">هتفضلي دايمًا ليكي مكانة خاصة عندي ❤️</p><button onclick="go(0)">إعادة الرحلة ❤️</button></section>
+</main>
+
+<div id="admin" class="hidden" style="padding:18px">
+ <div class="panel" style="margin:auto">
+  <h1>لوحة إدارة موقع نورهان</h1><p>كل التغييرات هنا تُحفظ أونلاين وتظهر للزوار.</p>
+  <div class="admin-grid" id="editor"></div>
+  <div class="card"><h2>إضافة صورة للمعرض</h2><input id="newPhoto" type="file" accept="image/*"><input id="newCaption" placeholder="وصف الصورة"><button id="uploadPhoto">رفع الصورة</button><div id="adminGallery" class="gallery"></div></div>
+  <div class="card"><h2>رفع صورة نورهان الرئيسية</h2><input id="finalUpload" type="file" accept="image/*"><button id="uploadFinal">رفع الصورة الرئيسية</button></div>
+  <div class="card"><h2>رفع الموسيقى</h2><input id="musicUpload" type="file" accept="audio/*"><button id="uploadMusic">رفع الأغنية</button></div>
+  <button id="save">حفظ كل التعديلات</button><button id="changePassword">تغيير كلمة مرور الإدارة</button><button id="logout">تسجيل الخروج</button>
+  <div id="status"></div>
+ </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://hadslvsvxvfqwjxmclti.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_cZ5r5M_nozjB8w3_69DcOg_USavzau-';
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const ADMIN_EMAIL = 'admin@noorhan.local'; // أنشئ هذا المستخدم من Authentication في Supabase
+const BUCKET = 'noorhan-media';
+const defaults = {
+ heroTitle:'بحبك يا نورهان',heroText:'كل حاجة حلوة في حياتي بتبدأ بوجودك ❤️',
+ balloonTitle:'كل بالونة فيها أمنية ليكي 🎈',balloonText:'أتمنى أشوف ضحكتك دايمًا، وتفضلي أجمل حاجة في حياتي.',
+ galleryTitle:'أجمل ذكرياتنا 📸',galleryText:'كل صورة ليها حكاية، وكل حكاية فيها جزء من قلبي.',
+ musicTitle:'أغنية مخصوص ليكي 🎵',musicText:'كل أغنية حب بتفكرني بيكي',
+ letterTitle:'رسالة من قلبي ليكي 💌',letterText:'يا نورهان ❤️\\n\\nمش عارف أوصفلك قد إيه وجودك في حياتي بيفرق معايا.\\n\\nبحبك جدًا ❤️',
+ finalTitle:'أجمل واحدة في الدنيا ❤️',finalText:'هتفضلي دايمًا ليكي مكانة خاصة عندي ❤️',
+ finalImage:'',musicUrl:'',gallery:[]
+};
+let content = structuredClone(defaults), session = null;
+const $ = id => document.getElementById(id);
+function status(t){$('status').textContent=t}
+function show(el){$('gate').classList.add('hidden');$('site').classList.add('hidden');$('admin').classList.add('hidden');$(el).classList.remove('hidden')}
+function go(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$('s'+n).classList.add('active');window.scrollTo(0,0)}
+async function loadContent(){
+ const {data,error}=await supabase.from('site_content').select('content').eq('id',1).maybeSingle();
+ if(error) throw error;
+ content={...structuredClone(defaults),...(data?.content||{})};
+ renderSite();
+}
+function renderSite(){
+ for(const k of Object.keys(defaults)){if(typeof defaults[k]==='string' && $(k)) $(k).textContent=content[k]||''}
+ $('finalImage').src=content.finalImage||'';
+ $('audio').src=content.musicUrl||'';
+ $('gallery').innerHTML='';
+ (content.gallery||[]).forEach(item=>{const wrap=document.createElement('div');const img=document.createElement('img');img.src=item.url;img.alt=item.caption||'ذكرى';const cap=document.createElement('p');cap.textContent=item.caption||'';wrap.append(img,cap);$('gallery').append(wrap)});
+}
+$('gateBtn').onclick=async()=>{
+ const pass=$('gatePass').value;
+ $('gateError').textContent='جاري التحقق...';
+ if(pass==='2020121'){try{await loadContent();show('site');return}catch(e){$('gateError').textContent='تعذر تحميل الموقع. تأكد من إعداد قاعدة البيانات.';return}}
+ // كلمة الإدارة لا تُخزّن في JavaScript؛ يتم التحقق منها عبر Supabase Auth
+ const {data,error}=await supabase.auth.signInWithPassword({email:ADMIN_EMAIL,password:pass});
+ if(error){$('gateError').textContent='كلمة المرور غير صحيحة أو حساب الإدارة لم يتم إعداده.';return}
+ session=data.session;
+ try{await loadContent();buildEditor();show('admin')}catch(e){$('gateError').textContent='تم تسجيل الدخول لكن تعذر تحميل المحتوى: '+e.message}
+};
+$('gatePass').addEventListener('keydown',e=>{if(e.key==='Enter')$('gateBtn').click()});
+function buildEditor(){
+ const fields=[
+ ['heroTitle','عنوان القلب'],['heroText','كلام الصفحة الأولى'],
+ ['balloonTitle','عنوان البالونات'],['balloonText','كلام البالونات'],
+ ['galleryTitle','عنوان الصور'],['galleryText','وصف الصور'],
+ ['musicTitle','عنوان الموسيقى'],['musicText','وصف الموسيقى'],
+ ['letterTitle','عنوان الرسالة'],['letterText','نص الرسالة'],
+ ['finalTitle','عنوان الصورة الأخيرة'],['finalText','وصف الصورة الأخيرة']
+ ];
+ $('editor').innerHTML='';
+ fields.forEach(([key,label])=>{const box=document.createElement('div');const l=document.createElement('label');l.textContent=label;const input=key.toLowerCase().includes('text')?document.createElement('textarea'):document.createElement('input');input.value=content[key]||'';input.dataset.key=key;box.append(l,input);$('editor').append(box)});
+ renderAdminGallery();
+}
+function renderAdminGallery(){
+ $('adminGallery').innerHTML='';
+ (content.gallery||[]).forEach((item,i)=>{const box=document.createElement('div');box.className='gallery-card';const img=document.createElement('img');img.src=item.url;const p=document.createElement('p');p.textContent=item.caption||'';const b=document.createElement('button');b.textContent='حذف';b.onclick=()=>{content.gallery.splice(i,1);renderAdminGallery()};box.append(img,p,b);$('adminGallery').append(box)});
+}
+async function upload(file,path){
+ const {error}=await supabase.storage.from(BUCKET).upload(path,file,{upsert:true,contentType:file.type});
+ if(error)throw error;
+ const {data}=supabase.storage.from(BUCKET).getPublicUrl(path);return data.publicUrl;
+}
+$('uploadPhoto').onclick=async()=>{try{const f=$('newPhoto').files[0];if(!f)throw Error('اختار صورة أولًا');status('جاري رفع الصورة...');const url=await upload(f,`gallery/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`);content.gallery.push({url,caption:$('newCaption').value});renderAdminGallery();status('تم رفع الصورة. اضغط حفظ كل التعديلات.')}catch(e){status(e.message)}};
+$('uploadFinal').onclick=async()=>{try{const f=$('finalUpload').files[0];if(!f)throw Error('اختار صورة');status('جاري الرفع...');content.finalImage=await upload(f,`final/${Date.now()}-${f.name}`);status('تم رفع الصورة الرئيسية. اضغط حفظ كل التعديلات.')}catch(e){status(e.message)}};
+$('uploadMusic').onclick=async()=>{try{const f=$('musicUpload').files[0];if(!f)throw Error('اختار ملف موسيقى');status('جاري الرفع...');content.musicUrl=await upload(f,`music/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`);status('تم رفع الموسيقى. اضغط حفظ كل التعديلات.')}catch(e){status(e.message)}};
+$('save').onclick=async()=>{try{document.querySelectorAll('[data-key]').forEach(el=>content[el.dataset.key]=el.value);const {error}=await supabase.from('site_content').upsert({id:1,content,updated_at:new Date().toISOString()});if(error)throw error;renderSite();status('تم حفظ التعديلات بنجاح أونلاين ❤️')}catch(e){status('خطأ في الحفظ: '+e.message)}};
+$('changePassword').onclick=async()=>{const p=prompt('اكتب كلمة المرور الجديدة للإدارة (يفضل 12 حرفًا أو أكثر):');if(!p)return;if(p.length<8){status('كلمة المرور يجب أن تكون 8 أحرف على الأقل.');return}const {error}=await supabase.auth.updateUser({password:p});status(error?'تعذر تغيير كلمة المرور: '+error.message:'تم تغيير كلمة مرور الإدارة. احفظها في مكان آمن.')};
+$('logout').onclick=async()=>{await supabase.auth.signOut();session=null;$('gatePass').value='';show('gate')};
+</script>
+</body></html>
