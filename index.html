@@ -74,7 +74,15 @@ let content = structuredClone(defaults), session = null;
 const $ = id => document.getElementById(id);
 function status(t){$('status').textContent=t}
 function show(el){$('gate').classList.add('hidden');$('site').classList.add('hidden');$('admin').classList.add('hidden');$(el).classList.remove('hidden')}
-function go(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$('s'+n).classList.add('active');window.scrollTo(0,0)}
+function go(n){
+ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+ const nextScreen = document.getElementById('s' + n);
+ if(nextScreen){
+   nextScreen.classList.add('active');
+   window.scrollTo({top:0, behavior:'smooth'});
+ }
+}
+window.go = go;
 async function loadContent(){
  const {data,error}=await supabase.from('site_content').select('content').eq('id',1).maybeSingle();
  if(error) throw error;
